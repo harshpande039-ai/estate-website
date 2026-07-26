@@ -3,10 +3,12 @@
  * Core Interactive System
  */
 
+import { properties as propertyData } from './properties.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Ensure properties array is loaded
-  const propertyData = window.properties || [];
-  let filteredData = [...propertyData];
+  const propertyList = propertyData || [];
+  let filteredData = [...propertyList];
 
   // DOM Elements
   const ringContainer = document.getElementById('ring-container');

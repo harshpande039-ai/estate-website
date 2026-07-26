@@ -552,7 +552,7 @@ const baseProperties = [
 ];
 
 // Generate 300+ entries using structured variation
-const properties = [];
+const generatedProperties = [];
 const statusOptions = ["Ready to Move", "Under Construction", "New Launch", "Sold Out"];
 const suffixes = ["Premium", "Elite", "Signature", "Heritage", "Majestic", "Exclusive", "Royal", "Sovereign"];
 
@@ -560,7 +560,7 @@ for (let i = 0; i < 300; i++) {
   const base = baseProperties[i % baseProperties.length];
   const suffix = suffixes[Math.floor(i / baseProperties.length) % suffixes.length];
   
-  properties.push({
+  generatedProperties.push({
     id: i + 1,
     title: `${base.title} ${suffix || ""}`.trim(),
     category: base.category,
@@ -572,10 +572,9 @@ for (let i = 0; i < 300; i++) {
   });
 }
 
-// Export to window/global scope for static HTML load
+export const properties = generatedProperties;
+
+// Keep a browser-global fallback for any legacy usage
 if (typeof window !== "undefined") {
   window.properties = properties;
-}
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = properties;
 }
