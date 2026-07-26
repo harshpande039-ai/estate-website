@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opulent Acres | Premium Real Estate & Luxury Developments</title>
+  <meta name="description" content="Explore Opulent Acres' portfolio of luxury apartments, villas, commercial spaces, and signature waterfront residences. View our exclusive interactive 3D orbit gallery.">
+  
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- GSAP for premium smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <!-- Lenis for buttery-smooth momentum scrolling -->
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+</head>
+<body>
+
+  <!-- Custom Cursor Follower -->
+  <div id="custom-cursor"></div>
+  <div id="custom-cursor-ring"></div>
+
+  <!-- Header Section -->
+  <header class="main-header">
+    <div class="logo">
+      <a href="#">OPULENT <span>ACRES</span></a>
+    </div>
+    
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#hero-section" class="nav-link active">Properties</a></li>
+        <li><a href="#developments-section" class="nav-link">Developments</a></li>
+        <li><a href="#investment-section" class="nav-link">Investment</a></li>
+        <li><a href="#about-section" class="nav-link">About</a></li>
+        <li><a href="#contact-section" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav-overlay">
+    <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">&#215;</button>
+    <nav class="mobile-nav">
+      <ul>
+        <li><a href="#hero-section" class="mobile-nav-link">Properties</a></li>
+        <li><a href="#developments-section" class="mobile-nav-link">Developments</a></li>
+        <li><a href="#investment-section" class="mobile-nav-link">Investment</a></li>
+        <li><a href="#about-section" class="mobile-nav-link">About</a></li>
+        <li><a href="#contact-section" class="mobile-nav-link">Contact</a></li>
+      </ul>
+
+    </nav>
+  </div>
+
+  <!-- Main Hero & Ring Area -->
+  <main class="hero-container" id="hero-section">
+    
+    <!-- Sidebar Control Buttons (Left / Right) -->
+    <div class="control-triggers">
+      <button class="control-btn filter-trigger" id="filter-btn">
+        Filter Properties <span class="plus">+</span>
+      </button>
+      <button class="control-btn view-toggle-btn" id="view-toggle-btn">
+        Grid view <span class="plus">+</span>
+      </button>
+    </div>
+
+
+    <!-- Center Content Box -->
+    <div class="center-content-wrapper">
+      <div class="center-inner" id="center-display">
+        <!-- Default State -->
+        <div class="state-default active">
+          <h1 class="headline">Find Your Next Landmark Property.</h1>
+          <p class="subheading">Explore 300+ curated luxury residences, commercial spaces, villas, and investment-ready developments.</p>
+        </div>
+        <!-- Active Hover/Selected State -->
+        <div class="state-active">
+          <h2 class="active-title" id="active-title">Aurora Skyline Residences</h2>
+          <div class="active-preview-frame">
+            <img src="assets/fallback.svg" alt="Property Preview" class="active-image" id="active-image" loading="lazy">
+          </div>
+          <div class="active-meta" id="active-meta">Sky Residences · Dubai</div>
+          <button class="cta-view-property" id="active-cta">View Property <span class="plus">+</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Ring Orbit Gallery Container -->
+    <div class="orbit-gallery-wrap" id="ring-view">
+      <div class="orbit-perspective">
+        <div class="orbit-ring" id="ring-container">
+          <!-- Panels are dynamically created by script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid View Section (hidden by default) -->
+    <div class="grid-gallery-wrap hidden" id="grid-view">
+      <div class="grid-filters-summary">
+        <span id="grid-count">Showing 300 properties</span>
+        <button class="clear-filters-btn hidden" id="grid-clear-btn">Clear Filters</button>
+      </div>
+      <div class="property-grid" id="property-grid-container">
+        <!-- Grid cards dynamically loaded -->
+      </div>
+    </div>
+
+    <!-- Bottom Navigation / Instructions Hint -->
+    <div class="bottom-hint">
+      <div class="hint-text" id="interaction-hint">MOVE TO EXPLORE &middot; DRAG TO SPIN &middot; CLICK TO LOCK</div>
+    </div>
+  </main>
+
+  <!-- DEVELOPMENTS SECTION -->
+  <section id="developments-section" class="content-section">
+    <div class="section-container">
+      <div class="section-header reveal-on-scroll">
+        <span class="section-subtitle">Signature Portfolio</span>
+        <h2 class="section-title">Active Developments</h2>
+        <div class="section-divider"></div>
+      </div>
+      
+      <div class="developments-grid">
+        <div class="development-card reveal-on-scroll">
+          <div class="dev-img-wrap">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80" alt="Aurora Sky Heights" loading="lazy">
+            <div class="dev-badge">Signature Collection</div>
+          </div>
+          <div class="dev-info">
+            <h3>Aurora Sky Heights</h3>
+            <p class="dev-location">Downtown Dubai, UAE</p>
+            <p class="dev-desc">A masterpiece of vertical luxury. A collection of exclusive sky mansions featuring private infinity pools, panoramic skyline views, and bespoke concierge services.</p>
+            <div class="dev-meta">
+              <span><strong>Architect:</strong> Zaha Hadid Architects</span>
+              <span><strong>Est. Completion:</strong> Q4 2028</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="development-card reveal-on-scroll stagger-delay-1">
+          <div class="dev-img-wrap">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="The Oasis Waterfront" loading="lazy">
+            <div class="dev-badge">Waterfront Living</div>
+          </div>
+          <div class="dev-info">
+            <h3>The Oasis Waterfront</h3>
+            <p class="dev-location">Candolim Goa, India</p>
+            <p class="dev-desc">An ultra-exclusive gated enclave of 12 luxury waterfront estates. Blending contemporary tropical architecture with private docking, lush landscapes, and uninterrupted sunset views.</p>
+            <div class="dev-meta">
+              <span><strong>Architect:</strong> Pininfarina Architecture</span>
+              <span><strong>Est. Completion:</strong> Q2 2027</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="development-card reveal-on-scroll stagger-delay-2">
+          <div class="dev-img-wrap">
+            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Celeste Landmark Plaza" loading="lazy">
+            <div class="dev-badge">Elite Business Hub</div>
+          </div>
+          <div class="dev-info">
+            <h3>Celeste Landmark Plaza</h3>
+            <p class="dev-location">Golf Course Road Gurugram, India</p>
+            <p class="dev-desc">The future of premium workspaces. A state-of-the-art corporate landmark offering biophilic office configurations, net-zero carbon operations, and global business lounges.</p>
+            <div class="dev-meta">
+              <span><strong>Architect:</strong> Foster + Partners</span>
+              <span><strong>Est. Completion:</strong> Q1 2029</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTMENT SECTION -->
+  <section id="investment-section" class="content-section secondary-bg">
+    <div class="section-container">
+      <div class="section-header reveal-on-scroll">
+        <span class="section-subtitle">Wealth Creation</span>
+        <h2 class="section-title">Investment Portfolios</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="investment-showcase">
+        <div class="investment-text-content reveal-on-scroll">
+          <h3>Why Invest With Opulent Acres?</h3>
+          <p>Opulent Acres provides private and institutional clients with exclusive access to high-yield real estate investments globally. Our structured portfolios are focused on premium capital appreciation and stable recurring rental returns in high-growth corridors.</p>
+          
+          <ul class="investment-benefits">
+            <li>
+              <span class="benefit-icon">✔</span>
+              <div>
+                <strong>Fractional Co-Ownership</strong>
+                <p>Diversify your capital across multiple prime landmark properties starting from lower entry thresholds.</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon">✔</span>
+              <div>
+                <strong>High Rental Yield Projections</strong>
+                <p>Our properties are selected in top economic hubs ensuring projected annual net yields of 8% - 11%.</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon">✔</span>
+              <div>
+                <strong>Tax-Efficient Asset Growth</strong>
+                <p>Strategic offshore asset holding models offering optimized tax structures and capital repatriation.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="investment-stats-grid">
+          <div class="stat-box reveal-on-scroll">
+            <span class="stat-number">12.8%</span>
+            <span class="stat-label">Avg. Annual Capital Growth</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 85%"></div></div>
+          </div>
+          <div class="stat-box reveal-on-scroll stagger-delay-1">
+            <span class="stat-number">9.4%</span>
+            <span class="stat-label">Net Projected Rental Yield</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 75%"></div></div>
+          </div>
+          <div class="stat-box reveal-on-scroll stagger-delay-2">
+            <span class="stat-number">$1.2B+</span>
+            <span class="stat-label">Assets Under Management</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 90%"></div></div>
+          </div>
+          <div class="stat-box reveal-on-scroll stagger-delay-3">
+            <span class="stat-number">98.4%</span>
+            <span class="stat-label">Average Portfolio Occupancy</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 98%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section id="about-section" class="content-section">
+    <div class="section-container">
+      <div class="about-grid">
+        <div class="about-info-col reveal-on-scroll">
+          <span class="section-subtitle">Our Legacy</span>
+          <h2 class="section-title">Pioneering Architectural Excellence</h2>
+          <div class="section-divider align-left"></div>
+          
+          <p class="about-lead">Founded on the values of architectural integrity and uncompromising luxury, Opulent Acres curated global landmarks that redefine skylines.</p>
+          
+          <p>For more than a decade, we have collaborated with world-class visionaries, master architects, and sustainable engineers. Every property in our portfolio represents a synthesis of premium craftsmanship, smart automation, and environmentally conscious design.</p>
+          
+          <div class="about-milestones">
+            <div class="milestone-card">
+              <h4>12+</h4>
+              <p>Global Hubs</p>
+            </div>
+            <div class="milestone-card">
+              <h4>3,500+</h4>
+              <p>Elite Clients</p>
+            </div>
+            <div class="milestone-card">
+              <h4>40+</h4>
+              <p>Design Awards</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-img-col">
+          <div class="about-image-frame reveal-on-scroll stagger-delay-1">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Opulent Acres Design Vision" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact-section" class="content-section secondary-bg">
+    <div class="section-container">
+      <div class="section-header reveal-on-scroll">
+        <span class="section-subtitle">Connect With Us</span>
+        <h2 class="section-title">Register Your Interest</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="contact-wrap">
+        <div class="contact-form-card reveal-on-scroll">
+          <form class="glassmorphism-form" onsubmit="event.preventDefault(); alert('Thank you for registering your interest. An Opulent Acres Portfolio Advisor will contact you shortly.'); this.reset();">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-name">Full Name</label>
+                <input type="text" id="contact-name" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="contact-email">Email Address</label>
+                <input type="email" id="contact-email" placeholder="john@example.com" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-phone">Phone Number</label>
+                <input type="tel" id="contact-phone" placeholder="+1 (555) 000-0000" required>
+              </div>
+              <div class="form-group">
+                <label for="contact-interest">Preferred Category</label>
+                <select id="contact-interest">
+                  <option value="Sky Residences">Sky Residences</option>
+                  <option value="Villas">Villas</option>
+                  <option value="Waterfront">Waterfront</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Penthouses">Penthouses</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" rows="5" placeholder="Tell us about your requirements..." required></textarea>
+            </div>
+            <button type="submit" class="submit-form-btn">Submit Inquiry <span class="plus">+</span></button>
+          </form>
+        </div>
+
+        <div class="contact-details-col reveal-on-scroll stagger-delay-1">
+          <h3>Global Headquarters</h3>
+          
+          <div class="office-location">
+            <h5>Dubai HQ</h5>
+            <p>Level 45, The Exchange Tower, Business Bay, Dubai, UAE</p>
+            <p><strong>Tel:</strong> +971 4 555 0192 | <strong>Email:</strong> dubai@opulentacres.com</p>
+          </div>
+
+          <div class="office-location">
+            <h5>Mumbai Office</h5>
+            <p>Capital Gate Towers, Bandra Kurla Complex (BKC), Mumbai, India</p>
+            <p><strong>Tel:</strong> +91 22 6666 0199 | <strong>Email:</strong> india@opulentacres.com</p>
+          </div>
+
+          <div class="social-links">
+            <a href="#" class="social-icon">LinkedIn</a>
+            <a href="#" class="social-icon">Instagram</a>
+            <a href="#" class="social-icon">YouTube</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-logo">OPULENT <span>ACRES</span></div>
+      <p class="footer-copyright">&copy; 2026 Opulent Acres. All rights reserved. Designed for elite real estate investments.</p>
+    </div>
+  </footer>
+
+
+  <!-- Premium Full-Screen Filter Overlay -->
+  <div class="filter-overlay" id="filter-overlay">
+    <div class="filter-overlay-header">
+      <div class="logo">OPULENT <span>ACRES</span></div>
+      <button class="close-overlay" id="close-filter-btn" aria-label="Close Filter">
+        <span>Close</span> <span class="close-icon">&times;</span>
+      </button>
+    </div>
+    
+    <div class="filter-overlay-content">
+      <h3 class="filter-title">Filter Portfolio</h3>
+      
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label for="filter-type">Property Type</label>
+          <select id="filter-type">
+            <option value="">All Categories</option>
+            <option value="Luxury Apartments">Luxury Apartments</option>
+            <option value="Villas">Villas</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Waterfront">Waterfront</option>
+            <option value="Sky Residences">Sky Residences</option>
+            <option value="Plots">Plots</option>
+            <option value="Retail Spaces">Retail Spaces</option>
+            <option value="Farmhouses">Farmhouses</option>
+            <option value="Smart Homes">Smart Homes</option>
+            <option value="Penthouses">Penthouses</option>
+            <option value="Affordable Luxury">Affordable Luxury</option>
+            <option value="Upcoming Projects">Upcoming Projects</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-location">Location</label>
+          <select id="filter-location">
+            <option value="">All Locations</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Gurugram">Gurugram</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Pune">Pune</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Noida">Noida</option>
+            <option value="Goa">Goa</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+            <option value="Delhi NCR">Delhi NCR</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Ahmedabad">Ahmedabad</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-budget">Budget (USD)</label>
+          <select id="filter-budget">
+            <option value="">Any Budget</option>
+            <option value="under-1.5m">Under $1.5M</option>
+            <option value="1.5m-3m">$1.5M - $3.0M</option>
+            <option value="3m-6m">$3.0M - $6.0M</option>
+            <option value="above-6m">Above $6.0M</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-status">Status</label>
+          <select id="filter-status">
+            <option value="">Any Status</option>
+            <option value="Ready to Move">Ready to Move</option>
+            <option value="Under Construction">Under Construction</option>
+            <option value="New Launch">New Launch</option>
+            <option value="Sold Out">Sold Out</option>
+            <option value="Upcoming">Upcoming</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="apply-filters-btn" id="apply-filters-btn">Apply Selection</button>
+        <button class="reset-filters-btn" id="reset-filters-btn">Reset All</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Load Data and Logic Scripts -->
+  <script src="properties.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
