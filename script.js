@@ -4,8 +4,27 @@
  */
 
 import { properties as propertyData } from './properties.js';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  const errMsg = 'Critical system configuration missing. Registration service is currently offline.';
+  console.error(errMsg);
+  document.addEventListener('DOMContentLoaded', () => {
+    const feedback = document.getElementById('form-feedback');
+    if (feedback) {
+      feedback.textContent = errMsg;
+      feedback.className = 'form-feedback visible error';
+    }
+  });
+}
+
+const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder');
 
 document.addEventListener('DOMContentLoaded', () => {
+
   // Ensure properties array is loaded
   const propertyList = propertyData || [];
   let filteredData = [...propertyList];
@@ -50,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Hover cursor state triggers
   function setupCursorHoverTriggers() {
-    const hoverables = document.querySelectorAll('a, button, select, .panel-card, .category-tag');
+    const hoverables = document.querySelectorAll('a, button, select, input, .panel-card, .category-tag');
     hoverables.forEach(item => {
       item.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
       item.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
@@ -101,9 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-      e.preventDefault();
-      
       const targetId = link.getAttribute('href');
+      if (!targetId || !targetId.startsWith('#')) return; // Allow normal navigation
+      
+      e.preventDefault();
       const targetSection = document.querySelector(targetId);
       
       if (targetSection) {
@@ -814,6 +834,143 @@ document.addEventListener('DOMContentLoaded', () => {
       { opacity: 0, scale: 0.9 }, 
       { opacity: 1, scale: 1, duration: 1.4, delay: 0.5, ease: 'power3.out' }
     );
+  }
+
+  // Supabase Registration Form Integration
+  const registrationForm = document.getElementById('registration-form');
+  const formFeedback = document.getElementById('form-feedback');
+
+  if (registrationForm && formFeedback) {
+    // Add hover listener for custom cursor hover states on dynamically updated elements
+    registrationForm.querySelectorAll('input, select, textarea, button').forEach(item => {
+      item.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      item.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    registrationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Bot honeypot check
+      const honeypot = document.getElementById('contact-honeypot') ? document.getElementById('contact-honeypot').value : '';
+      if (honeypot) {
+        console.warn('Spambot activity detected.');
+        formFeedback.textContent = 'Thank you! Your registration has been submitted successfully.';
+        formFeedback.className = 'form-feedback visible success';
+        registrationForm.reset();
+        return;
+      }
+
+      // Local submission rate limiting (max 3 submissions per 5 minutes)
+      const now = Date.now();
+      let submissions = JSON.parse(localStorage.getItem('opulent_submissions') || '[]');
+      // Filter out submissions older than 5 minutes (300,000 ms)
+      submissions = submissions.filter(t => now - t < 300000);
+      
+      if (submissions.length >= 3) {
+        formFeedback.textContent = 'Too many submissions. Please wait a few minutes before trying again.';
+        formFeedback.className = 'form-feedback visible error';
+        return;
+      }
+
+      // Show loading state
+      formFeedback.textContent = 'Submitting registration...';
+      formFeedback.className = 'form-feedback visible loading';
+
+      // Get values
+      const name = document.getElementById('contact-name').value;
+      const email = document.getElementById('contact-email').value;
+      const phone = document.getElementById('contact-phone').value;
+      const category = document.getElementById('contact-interest').value;
+      const message = document.getElementById('contact-message').value;
+
+      // Add current timestamp to rate limiting list
+      submissions.push(now);
+      localStorage.setItem('opulent_submissions', JSON.stringify(submissions));
+
+      try {
+        const { data, error } = await supabase
+          .from('registrations')
+          .insert([
+            { name, email, phone, category, message }
+          ]);
+
+        if (error) throw error;
+
+        // Show success state
+        formFeedback.textContent = 'Thank you! Your registration has been submitted successfully.';
+        formFeedback.className = 'form-feedback visible success';
+        registrationForm.reset();
+
+        // Auto hide success message after 5 seconds
+        setTimeout(() => {
+          formFeedback.className = 'form-feedback';
+        }, 5000);
+
+      } catch (error) {
+        console.error('Registration error:', error.message || '[REDACTED]');
+        formFeedback.textContent = `Error: ${error.message || 'Unable to submit registration. Please try again.'}`;
+        formFeedback.className = 'form-feedback visible error';
+      }
+    });
+  }
+
+  // Data Privacy Deletion Modal Controls
+  const privacyOverlay = document.getElementById('privacy-overlay');
+  const openPrivacyBtn = document.getElementById('open-privacy-btn');
+  const closePrivacyBtn = document.getElementById('close-privacy-btn');
+  const dataDeletionForm = document.getElementById('data-deletion-form');
+  const deleteFeedback = document.getElementById('delete-feedback');
+
+  if (openPrivacyBtn && privacyOverlay) {
+    openPrivacyBtn.addEventListener('click', () => {
+      privacyOverlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  if (closePrivacyBtn && privacyOverlay) {
+    closePrivacyBtn.addEventListener('click', () => {
+      privacyOverlay.style.display = 'none';
+      document.body.style.overflow = '';
+      if (deleteFeedback) deleteFeedback.className = 'form-feedback';
+    });
+  }
+
+  if (dataDeletionForm && deleteFeedback) {
+    // Add hover listener for custom cursor hover states on dynamically updated elements
+    dataDeletionForm.querySelectorAll('input, button').forEach(item => {
+      item.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      item.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    dataDeletionForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      deleteFeedback.textContent = 'Processing request...';
+      deleteFeedback.className = 'form-feedback visible loading';
+      
+      const email = document.getElementById('delete-email').value.trim();
+
+      try {
+        const { error } = await supabase
+          .rpc('delete_my_data_secure', { user_email: email });
+
+        if (error) throw error;
+
+        deleteFeedback.textContent = 'All registrations associated with this email have been permanently deleted.';
+        deleteFeedback.className = 'form-feedback visible success';
+        dataDeletionForm.reset();
+
+        setTimeout(() => {
+          deleteFeedback.className = 'form-feedback';
+        }, 5000);
+
+      } catch (error) {
+        console.error('Deletion error:', error.message || '[REDACTED]');
+        deleteFeedback.textContent = `Error: ${error.message || 'Unable to process deletion request.'}`;
+        deleteFeedback.className = 'form-feedback visible error';
+      }
+    });
   }
 
   init();

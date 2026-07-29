@@ -1481,11 +1481,8 @@ body.cursor-drag #custom-cursor-ring {
   }
 }
 
-
-
-
-/* ── Large Phone / Small Tablet (≤ 768px) ─────────────────────────────── */
-@media (max-width: 768px) {
+/* ── Tablet & Small Screens (≤ 1024px) ─────────────────────────────────── */
+@media (max-width: 1024px) {
   /* Hide desktop cursor, show default */
   body {
     cursor: default;
@@ -1508,6 +1505,17 @@ body.cursor-drag #custom-cursor-ring {
 
   .main-header {
     padding: 16px 20px;
+  }
+
+  /* Stack layouts on tablets & phones */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .contact-wrap {
+    grid-template-columns: 1fr;
+    gap: 45px;
   }
 
   /* Hero Text */
@@ -1823,4 +1831,103 @@ body.cursor-drag #custom-cursor-ring {
   .panel-card {
     cursor: pointer;
   }
+}
+
+/* ==========================================================================
+   Form Feedback Styles (Premium Glassmorphism States)
+   ========================================================================== */
+.form-feedback {
+  margin-top: 20px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  transition: all 0.4s var(--t-smooth);
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.form-feedback.visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form-feedback.success {
+  background: rgba(46, 213, 115, 0.1);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(46, 213, 115, 0.05);
+}
+
+.form-feedback.error {
+  background: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(255, 71, 87, 0.05);
+}
+
+.form-feedback.loading {
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-feedback.loading::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: form-spinner 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes form-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer Admin Portal Link */
+.footer-admin-link {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.admin-portal-link {
+  color: var(--text-muted);
+  font-size: 11px;
+  text-decoration: none;
+  font-family: var(--font-primary);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.3s var(--t-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+.admin-portal-link:hover {
+  color: #ffffff;
+}
+
+.admin-portal-link .arrow {
+  font-size: 9px;
+  transition: transform 0.3s var(--t-smooth);
+  display: inline-block;
+}
+
+.admin-portal-link:hover .arrow {
+  transform: translate(2px, -2px);
 }

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Opulent Acres</title>
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       1. Login Gate Screen
+       ========================================================================== -->
+  <div class="login-container" id="login-gate">
+    <div class="login-card">
+      <div class="login-logo">OPULENT <span>ACRES</span></div>
+      <div class="login-subtitle">Admin Portal Management</div>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label for="admin-id">Admin ID</label>
+          <input type="text" id="admin-id" class="form-input" placeholder="harsh2004" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="login-btn">Authenticate</button>
+        <div class="login-error" id="login-error">Invalid admin credentials.</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       2. Dashboard Portal
+       ========================================================================== -->
+  <div class="dashboard-container" id="dashboard-view">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="logo-group">
+        <h1>OPULENT <span>ACRES</span></h1>
+        <div class="badge-admin">Admin Dashboard</div>
+      </div>
+      <button class="btn-secondary" id="logout-btn">Sign Out</button>
+    </header>
+
+    <!-- KPI Statistics Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Inquiries</span>
+        <span class="stat-value" id="stat-total">-</span>
+        <span class="stat-sub">Across all categories</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Today's Leads</span>
+        <span class="stat-value" id="stat-today">-</span>
+        <span class="stat-sub" id="stat-today-date">Registered today</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Top Category</span>
+        <span class="stat-value" id="stat-top-category">-</span>
+        <span class="stat-sub" id="stat-top-count">Most preferred type</span>
+      </div>
+    </div>
+
+    <!-- Live Controls / Searching -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <input type="text" id="search-input" class="search-input" placeholder="Search by name, email, or phone...">
+      </div>
+      <select id="category-filter" class="filter-dropdown">
+        <option value="">All Categories</option>
+        <option value="Sky Residences">Sky Residences</option>
+        <option value="Villas">Villas</option>
+        <option value="Waterfront">Waterfront</option>
+        <option value="Commercial">Commercial</option>
+        <option value="Penthouses">Penthouses</option>
+      </select>
+      <button class="btn-secondary" id="refresh-btn">Refresh</button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 80px;">ID</th>
+            <th style="width: 150px;">Date & Time</th>
+            <th>Client Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Category</th>
+            <th style="width: 180px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="registrations-body">
+          <!-- Dynamically populated rows -->
+          <tr id="table-loading-row">
+            <td colspan="7" class="state-row">Loading registrations from Supabase...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       3. Details Modal Overlay
+       ========================================================================== -->
+  <div class="modal-overlay" id="details-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Inquiry Details</h3>
+        <button class="modal-close" id="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="info-block">
+            <label>Registration ID</label>
+            <p id="modal-id">-</p>
+          </div>
+          <div class="info-block">
+            <label>Date & Time</label>
+            <p id="modal-date">-</p>
+          </div>
+          <div class="info-block">
+            <label>Client Name</label>
+            <p id="modal-name">-</p>
+          </div>
+          <div class="info-block">
+            <label>Category Interest</label>
+            <p id="modal-category">-</p>
+          </div>
+          <div class="info-block">
+            <label>Email Address</label>
+            <p id="modal-email">-</p>
+          </div>
+          <div class="info-block">
+            <label>Phone Number</label>
+            <p id="modal-phone">-</p>
+          </div>
+          <div class="info-block info-block-full">
+            <label>Requirements Message</label>
+            <div class="message-box" id="modal-message">-</div>
+          </div>
+        </div>
+        <div class="modal-actions" style="display: flex; justify-content: flex-end; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+          <button type="button" class="btn-action btn-delete" id="modal-delete-btn" style="background: #ff4757; color: #fff; padding: 10px 24px; border: 1px solid rgba(255, 71, 87, 0.4);">Delete Inquiry</button>
+        </div>
+      </div>
+  </div>
+
+  <!-- ==========================================================================
+       4. Custom Confirmation Modal
+       ========================================================================== -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-card" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Deletion</h3>
+        <button class="modal-close" id="close-confirm-btn">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 15px;">
+          Are you sure you want to permanently delete registration <strong id="confirm-id-display">#</strong>?
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button type="button" class="btn-secondary" id="confirm-cancel-btn" style="padding: 10px 24px;">Cancel</button>
+          <button type="button" class="btn-action btn-delete" id="confirm-delete-btn" style="background: #ff4757; color: #fff; padding: 10px 24px; border: 1px solid rgba(255, 71, 87, 0.4);">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin logic module -->
+  <script type="module" src="/admin.js"></script>
+</body>
+</html>

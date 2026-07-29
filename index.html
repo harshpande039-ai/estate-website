@@ -301,7 +301,7 @@
 
       <div class="contact-wrap">
         <div class="contact-form-card reveal-on-scroll">
-          <form class="glassmorphism-form" onsubmit="event.preventDefault(); alert('Thank you for registering your interest. An Opulent Acres Portfolio Advisor will contact you shortly.'); this.reset();">
+          <form id="registration-form" class="glassmorphism-form">
             <div class="form-row">
               <div class="form-group">
                 <label for="contact-name">Full Name</label>
@@ -330,9 +330,17 @@
             </div>
             <div class="form-group">
               <label for="contact-message">Message</label>
-              <textarea id="contact-message" rows="5" placeholder="Tell us about your requirements..." required></textarea>
+              <textarea id="contact-message" rows="5" placeholder="Tell us about your requirements... (optional)"></textarea>
             </div>
+            
+            <!-- Honeypot field for bot protection -->
+            <div style="display: none;" aria-hidden="true">
+              <label for="contact-honeypot">Do not fill this field</label>
+              <input type="text" id="contact-honeypot" tabindex="-1" autocomplete="off">
+            </div>
+
             <button type="submit" class="submit-form-btn">Submit Inquiry <span class="plus">+</span></button>
+            <div id="form-feedback" class="form-feedback"></div>
           </form>
         </div>
 
@@ -366,6 +374,11 @@
     <div class="footer-container">
       <div class="footer-logo">OPULENT <span>ACRES</span></div>
       <p class="footer-copyright">&copy; 2026 Opulent Acres. All rights reserved. Designed for elite real estate investments.</p>
+      <div class="footer-admin-link">
+        <a href="/admin.html" target="_blank" class="admin-portal-link">Admin Access <span class="arrow">↗</span></a>
+        <span style="color: var(--text-muted); margin: 0 10px;">&middot;</span>
+        <a href="javascript:void(0);" id="open-privacy-btn" class="admin-portal-link">Remove My Data <span class="arrow">↗</span></a>
+      </div>
     </div>
   </footer>
 
@@ -452,9 +465,37 @@
     </div>
   </div>
 
-
+  <!-- ==========================================================================
+       5. Data Privacy Deletion Modal
+       ========================================================================== -->
+  <div class="filter-overlay" id="privacy-overlay" style="display: none;">
+    <div class="filter-overlay-header">
+      <div class="logo">OPULENT <span>ACRES</span></div>
+      <button class="close-overlay" id="close-privacy-btn" aria-label="Close Privacy Portal">
+        <span>Close</span> <span class="close-icon">&times;</span>
+      </button>
+    </div>
+    
+    <div class="filter-overlay-content" style="max-width: 500px; margin: 0 auto; padding-top: 40px; color: #fff;">
+      <h3 class="filter-title" style="margin-bottom: 12px; font-family: var(--font-display); font-size: 24px;">Right to Be Forgotten</h3>
+      <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 30px; line-height: 1.6; font-family: var(--font-primary);">
+        In accordance with GDPR/CCPA regulations, you can permanently delete your registered details from our database.
+      </p>
+      
+      <form id="data-deletion-form" class="glassmorphism-form" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 30px; border-radius: 12px; text-align: left;">
+        <div class="form-group" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+          <label for="delete-email" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); font-family: var(--font-primary);">Registered Email Address</label>
+          <input type="email" id="delete-email" placeholder="client@example.com" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 14px; outline: none;" required>
+        </div>
+        <button type="submit" class="apply-filters-btn" style="width: 100%; justify-content: center; margin-top: 10px;">Remove My Details <span class="plus">+</span></button>
+        <div id="delete-feedback" class="form-feedback"></div>
+      </form>
+    </div>
+  </div>
 
   <!-- Load Data and Logic Scripts -->
   <script type="module" src="/script.js"></script>
+
+
 </body>
 </html>
